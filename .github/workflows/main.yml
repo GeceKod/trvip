@@ -1,9 +1,9 @@
-name: cixis fayli Links
+name: cixis fayli Links # Bu satırda bir hata olmamalı
 
-on:
+on: # Bu satırda ve altındaki boşluklarda hata olmamalı
   schedule:
     - cron: '*/5 * * * *'
-  workflow_dispatch:
+  workflow_dispatch: # Bu satır, manuel çalıştırmayı sağlar.
 
 jobs:
   extract:
