@@ -1,21 +1,21 @@
-name: cixis fayli Links # Bu satırda bir hata olmamalı
+name: cixis fayli Links
 
-on: # Bu satırda ve altındaki boşluklarda hata olmamalı
+on:
   schedule:
     - cron: '*/5 * * * *'
-  workflow_dispatch: # Bu satır, manuel çalıştırmayı sağlar.
+  workflow_dispatch:
 
 jobs:
   extract:
     runs-on: ubuntu-latest
     permissions:
-      contents: write # Bu deponun dosyalarını okuma izni için tutuyoruz
+      contents: write # Mevcut deponun dosyalarını okuma izni
+      pages: write    # Yeni Action'ın gerektiğinde kullanabileceği ek izin
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # ... (Python kurulum ve çalıştırma adımları aynı kalıyor) ...
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
@@ -32,21 +32,19 @@ jobs:
       - name: Run goals.py (kanallar.m3u8 oluşturulur)
         run: python goals.py
 
-      # DEĞİŞİKLİK: Farklı bir depoya push yapmak için Action etiketi güncelleniyor
-      - name: Push kanallar.m3u8 to target repository
-        # Action'ın kararlı versiyonunu (@v1) kullanın
-        uses: dmnemeth/action-push-to-another-repository@v1 
+      # --- DÜZELTİLMİŞ ADIM: Alternatif Action Kullanılıyor ---
+      - name: Push kanallar.m3u8 to target repository (GeceKod/listeler)
+        uses: peaceiris/actions-gh-pages@v4
         
         env:
-          # TOKEN SIRRINIZI KULLANIYOR
-          API_TOKEN_GITHUB: ${{ secrets.TARGET_REPO_TOKEN }} 
+          # GitHub sırrınızın (PAT) değeri buraya atanır.
+          ACTIONS_DEPLOY_KEY: ${{ secrets.TARGET_REPO_TOKEN }} 
           
         with:
-          source-directory: '.' 
-          destination-github-username: 'GeceKod'
-          destination-repository-name: 'listeler'
-          user-email: 'actions@github.com'
-          user-name: 'GitHub Actions (M3U8 Pusher)'
-          commit-message: 'Kanallar.m3u8 güncellendi (otomatik)'
-          target-directory: '/'
-          include-patterns: 'kanallar.m3u8'
+          # Dosyanın gönderileceği hedef depo.
+          external_repository: GeceKod/listeler 
+          
+          # goals.py tarafından oluşturulan dosyanın adını belirtir.
+          publish_dir: kanallar.m3u8 
+          
+          commit_message: 'Kanallar.m3u8 güncellendi (otomatik)'
