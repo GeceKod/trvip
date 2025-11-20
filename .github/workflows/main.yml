@@ -9,8 +9,8 @@ jobs:
   extract:
     runs-on: ubuntu-latest
     permissions:
-      contents: write # Mevcut deponun dosyalarını okuma izni
-      pages: write    # Yeni Action'ın gerektiğinde kullanabileceği ek izin
+      # Sadece contents: write yeterli olmalı
+      contents: write 
 
     steps:
       - name: Checkout repository
@@ -32,19 +32,22 @@ jobs:
       - name: Run goals.py (kanallar.m3u8 oluşturulur)
         run: python goals.py
 
-      # --- DÜZELTİLMİŞ ADIM: Alternatif Action Kullanılıyor ---
+      # --- DÜZELTİLMİŞ ADIM: cpina/push-to-another-repository Action'ı Kullanılıyor ---
       - name: Push kanallar.m3u8 to target repository (GeceKod/listeler)
-        uses: peaceiris/actions-gh-pages@v4
+        # PAT odaklı Action'a geçiş yapıldı
+        uses: cpina/push-to-another-repository@main 
         
         env:
-          # GitHub sırrınızın (PAT) değeri buraya atanır.
-          ACTIONS_DEPLOY_KEY: ${{ secrets.TARGET_REPO_TOKEN }} 
+          # PAT sırrınızı (TARGET_REPO_TOKEN) Action'ın beklediği adla kullanıyoruz
+          API_TOKEN_GITHUB: ${{ secrets.TARGET_REPO_TOKEN }} 
           
         with:
-          # Dosyanın gönderileceği hedef depo.
-          external_repository: GeceKod/listeler 
+          # Sadece kanallar.m3u8 dosyasını gönder
+          source-directory: 'kanallar.m3u8' 
           
-          # goals.py tarafından oluşturulan dosyanın adını belirtir.
-          publish_dir: kanallar.m3u8 
-          
-          commit_message: 'Kanallar.m3u8 güncellendi (otomatik)'
+          destination-github-username: 'GeceKod'
+          destination-repository-name: 'listeler'
+          user-email: 'actions@github.com'
+          user-name: 'GitHub Actions (M3U8 Pusher)'
+          commit-message: 'Kanallar.m3u8 güncellendi (otomatik)'
+          target-directory: '/' # Hedef deponun kök dizinine yaz
