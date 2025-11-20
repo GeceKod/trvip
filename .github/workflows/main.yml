@@ -9,38 +9,48 @@ jobs:
   extract:
     runs-on: ubuntu-latest
     permissions:
-      contents: write
+      contents: write # Bu deponun dosyalarını okuma izni için tutuyoruz
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # ... (Python kurulum ve çalıştırma adımları aynı kalıyor) ...
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
 
-      # DEĞİŞİKLİK 1: Gerekli kütüphaneler kuruluyor (artık playwright kullanıyoruz)
       - name: Install Python dependencies
         run: |
           pip install playwright
 
-      # DEĞİŞİKLİK 2: Playwright'ın kontrol edeceği Chromium tarayıcısı kuruluyor
       - name: Install Playwright browsers
         run: |
           playwright install chromium
 
-      - name: Run goals.py
+      - name: Run goals.py (kanallar.m3u8 oluşturulur)
         run: python goals.py
 
-      - name: Commit and Push changes
-        run: |
-          git config --global user.name "GitHub Actions"
-          git config --global user.email "actions@github.com"
-          git add .
-          if git diff --staged --quiet; then
-            echo "No changes to commit"
-          else
-            git commit -m "Auto-update m3u8 files"
-            git push
-          fi
+      ---
+      
+      # DEĞİŞİKLİK: Farklı bir depoya push yapmak için ayrı bir action kullanıyoruz
+      - name: Push kanallar.m3u8 to target repository
+        uses: dmnemeth/action-push-to-another-repository@main
+        # Bu Action, mevcut depodaki bir dosyayı belirtilen başka bir depoya push etmek için idealdir.
+        
+        env:
+          # Hedef depoya yazma yetkisi olan sırrı (PAT'yi) kullanıyoruz
+          API_TOKEN_GITHUB: ${{ secrets.TARGET_REPO_TOKEN }} 
+          
+        with:
+          source-directory: '.' # Hangi klasörden dosya alacağımızı belirtir
+          destination-github-username: 'GeceKod' # Hedef depodaki kullanıcı adı
+          destination-repository-name: 'listeler' # Hedef depo adı
+          user-email: 'actions@github.com'
+          user-name: 'GitHub Actions (M3U8 Pusher)'
+          commit-message: 'Kanallar.m3u8 güncellendi (otomatik)'
+          # Sadece kanallar.m3u8 dosyasını göndermek için:
+          target-directory: '/' # Hedef depoda dosyanın nereye yazılacağını belirtir (kök dizin)
+          # Hangi dosyaların gönderileceğini belirtir, önemli:
+          include-patterns: 'kanallar.m3u8'
