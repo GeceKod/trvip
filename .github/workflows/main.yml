@@ -31,9 +31,7 @@ jobs:
 
       - name: Run goals.py (kanallar.m3u8 oluşturulur)
         run: python goals.py
-
-      ---
-      
+         
       # DEĞİŞİKLİK: Farklı bir depoya push yapmak için ayrı bir action kullanıyoruz
       - name: Push kanallar.m3u8 to target repository
         uses: dmnemeth/action-push-to-another-repository@main
