@@ -31,24 +31,22 @@ jobs:
 
       - name: Run goals.py (kanallar.m3u8 oluşturulur)
         run: python goals.py
-         
-      # DEĞİŞİKLİK: Farklı bir depoya push yapmak için ayrı bir action kullanıyoruz
+
+      # DEĞİŞİKLİK: Farklı bir depoya push yapmak için Action etiketi güncelleniyor
       - name: Push kanallar.m3u8 to target repository
-        uses: dmnemeth/action-push-to-another-repository@main
-        # Bu Action, mevcut depodaki bir dosyayı belirtilen başka bir depoya push etmek için idealdir.
+        # Action'ın kararlı versiyonunu (@v1) kullanın
+        uses: dmnemeth/action-push-to-another-repository@v1 
         
         env:
-          # Hedef depoya yazma yetkisi olan sırrı (PAT'yi) kullanıyoruz
+          # TOKEN SIRRINIZI KULLANIYOR
           API_TOKEN_GITHUB: ${{ secrets.TARGET_REPO_TOKEN }} 
           
         with:
-          source-directory: '.' # Hangi klasörden dosya alacağımızı belirtir
-          destination-github-username: 'GeceKod' # Hedef depodaki kullanıcı adı
-          destination-repository-name: 'listeler' # Hedef depo adı
+          source-directory: '.' 
+          destination-github-username: 'GeceKod'
+          destination-repository-name: 'listeler'
           user-email: 'actions@github.com'
           user-name: 'GitHub Actions (M3U8 Pusher)'
           commit-message: 'Kanallar.m3u8 güncellendi (otomatik)'
-          # Sadece kanallar.m3u8 dosyasını göndermek için:
-          target-directory: '/' # Hedef depoda dosyanın nereye yazılacağını belirtir (kök dizin)
-          # Hangi dosyaların gönderileceğini belirtir, önemli:
+          target-directory: '/'
           include-patterns: 'kanallar.m3u8'
