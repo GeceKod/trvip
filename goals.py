@@ -19,7 +19,7 @@ def find_working_domain(page):
         print(f"⚠️ Öncelikli domain'e bağlanılamadı (Hata: {e.__class__.__name__}). Otomatik arama başlatılacak...")
 
     base = "https://trgoals"
-    start_range = 1400
+    start_range = 1459
     end_range = 2500
     domain_pattern = re.compile(r'https://trgoals[0-9]+\.xyz')
 
