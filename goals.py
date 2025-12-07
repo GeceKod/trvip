@@ -7,7 +7,7 @@ from playwright.sync_api import sync_playwright, Error as PlaywrightError
 def find_working_domain(page):
     """Verilen aralıkta çalışan ve doğru formattaki trgoals domain'ini bulur."""
     
-    MANUAL_DOMAIN = "https://trgoals1459.xyz/"
+    MANUAL_DOMAIN = "https://trgoals1480.xyz/"
     print(f"\n🔍 Öncelikli domain deneniyor: {MANUAL_DOMAIN}")
     try:
         response = page.goto(MANUAL_DOMAIN, timeout=20000, wait_until='domcontentloaded')
