@@ -11,7 +11,7 @@ def find_working_domain(page):
     # Not: Sitenin bazen http bazen https olabileceğini ve www olabileceğini hesaba katan esnek regex
     domain_pattern = re.compile(r'https?://(www\.)?trgoals[0-9]+\.xyz')
 
-    MANUAL_DOMAIN = "https://trgoals1485.xyz/" # Manueli güncel olana yakın tutmak iyidir
+    MANUAL_DOMAIN = "https://cutt.ly/PttPldnx/" # Manueli güncel olana yakın tutmak iyidir
     print(f"\n🔍 Öncelikli domain deneniyor: {MANUAL_DOMAIN}")
     
     try:
