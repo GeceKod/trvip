@@ -16,7 +16,7 @@ def find_working_domain(page):
 
     
 
-    MANUAL_DOMAIN = "https://cutt.ly/PttPldnx"
+    MANUAL_DOMAIN = "https://trgoals1485.xyz/"
 
     print(f"\n🔍 Öncelikli domain deneniyor: {MANUAL_DOMAIN}")
 
