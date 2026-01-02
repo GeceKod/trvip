@@ -40,7 +40,7 @@ def find_working_domain(page):
 
     base = "https://trgoals"
 
-    start_range = 1459
+    start_range = 1495
 
     end_range = 2500
 
